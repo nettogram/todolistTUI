@@ -1,0 +1,26 @@
+# Build output
+build/
+bin/
+dist/
+
+# Compiled files
+*.o 
+*.out 
+*.a 
+*.so 
+
+# logs
+*.log 
+
+# Secrets / local config
+.env
+.env.local
+.env.*
+!.env.example
+
+# Editor files
+*.swp
+*.swo
+
+# OS junk
+.DS_store
