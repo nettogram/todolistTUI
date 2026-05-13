@@ -16,7 +16,7 @@ typedef struct{
 // prototypes
 void addTask(task toDoList[], int *taskNum);
 void taskSelect(int *taskNum);
-void removeTask(task toDoList[], int *taskNum);
+void removeTask(task toDoList[], int *tasknum);
 void printOptions(void);
 void taskView(void);
 void makeTasksEmpty(task toDoList[]);
@@ -100,7 +100,7 @@ void saveTask(task toDoList[], int *tasknum)
   char lineParse[256];
   int compareTaskNum;
   
-  savedTasks = fopen("data/tasks.txt", "r");
+  savedTasks = fopen("../data/tasks.txt", "r");
   if (savedTasks != NULL) {
     while (fgets(lineParse, sizeof(lineParse),savedTasks) != NULL) {
       if (sscanf(lineParse, "Task #%d:", &compareTaskNum) == 1) {
@@ -113,15 +113,15 @@ void saveTask(task toDoList[], int *tasknum)
     }
     fclose(savedTasks);
   }
-  savedTasks = fopen("data/tasks.txt", "a");
-      if (savedTasks != NULL) {
-        fprintf(savedTasks, "Task #%d: %s\n", *tasknum, toDoList[*tasknum].description);
-        fclose(savedTasks);
-        return;
-      } else {
-        printf("ERROR: File cannot be opened");
-        return;
-      }
+  savedTasks = fopen("../data/tasks.txt", "a");
+    if (savedTasks != NULL) {
+      fprintf(savedTasks, "Task #%d: %s\n", *tasknum, toDoList[*tasknum].description);
+      fclose(savedTasks);
+      return;
+    } else {
+      printf("ERROR: File cannot be opened");
+      return;
+    }
 }
 
 void printOptions()
@@ -135,11 +135,28 @@ void printOptions()
 
 void removeTask(task toDoList[], int *tasknum)
 {
+  FILE *refreshTask;
   for (int i = 0; i < INPUTLENGTH; i++)
     toDoList[*tasknum].description[i] = '\0';
   toDoList[*tasknum].storage = EMPTY;
-  printf("\n");
-  return;
+
+
+  refreshTask = fopen("..data/tasks.tmp", "w");
+
+  if (refreshTask != NULL) {
+    for (int i = 0; i < 10; i++) {
+      if (toDoList[i].storage != EMPTY)
+        fprintf(refreshTask, "Task #%d: %s\n", i, toDoList[i].description);
+    }
+    fclose(refreshTask);
+    remove("../data/tasks.tmp");
+    rename("../data/tasks.tmp", "../data/tasks.txt");
+    return;
+  } else {
+      printf("ERROR: Task cannot be performed.");
+      remove("..data/tasks.tmp");
+      return;
+  }
 }
 
 void taskSelect(int *taskoption)
@@ -158,7 +175,7 @@ void taskView()
   char tempStringBuffer[256];
   printf("\n");
 
-  fileRead = fopen("data/tasks.txt", "r");
+  fileRead = fopen("../data/tasks.txt", "r");
 
   if (fileRead != NULL) {
     while (fgets(tempStringBuffer, sizeof(tempStringBuffer), fileRead) != NULL) {
