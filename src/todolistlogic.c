@@ -18,7 +18,7 @@ void addTask(task toDoList[], int *taskNum);
 void taskSelect(int *taskNum);
 void removeTask(task toDoList[], int *taskNum);
 void printOptions(void);
-void taskView(task toDoList[]);
+void taskView(void);
 void makeTasksEmpty(task toDoList[]);
 void saveTask(task toDoList[], int *tasknum);
 
@@ -57,7 +57,7 @@ int main(void)
             break;
         }
     } case 3: {
-        taskView(toDoList);
+        taskView();
         break;
     } case 4:
         return 0;
@@ -152,17 +152,24 @@ void taskSelect(int *taskoption)
   } 
 }
 
-void taskView(task task[])
+void taskView()
 {
-  int tasknum;
+  FILE *fileRead;
+  char tempStringBuffer[256];
   printf("\n");
 
-  for (int i = 0; i < 10; i++) {
-    if (task[i].storage != EMPTY) {
-      tasknum = i;
-      printf("Task #%d: %s\n", tasknum, task[tasknum].description);
+  fileRead = fopen("data/tasks.txt", "r");
+
+  if (fileRead != NULL) {
+    while (fgets(tempStringBuffer, sizeof(tempStringBuffer), fileRead) != NULL) {
+      printf("%s", tempStringBuffer);
     }
+  } else {
+      printf("ERROR: No tasks saved.\n");
+      return;
   }
+  fclose(fileRead);
+  return;
 }
 
 void makeTasksEmpty(task toDoList[])
