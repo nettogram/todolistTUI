@@ -20,6 +20,7 @@ void removeTask(task toDoList[], int *taskNum);
 void printOptions(void);
 void taskView(task toDoList[]);
 void makeTasksEmpty(task toDoList[]);
+void saveTask(task toDoList[], int *tasknum);
 
 int main(void)
 {
@@ -39,11 +40,12 @@ int main(void)
         taskSelect(taskselect);
         if (*taskselect == ERROR) {
           break;
-        } else if (toDoList[taskselect].storage == NOTEMPTY) {
+        } else if (toDoList[*taskselect].storage == NOTEMPTY) {
             printf("Unable to fill entry. Task slot is currently filled");
             break;
         } else {
             addTask(toDoList, taskselect);
+            saveTask(toDoList, taskselect);
             break;
         }
     } case 2: {
@@ -90,6 +92,36 @@ void addTask(task toDoList[], int *tasknum)
     toDoList[*tasknum].description[i] = '\0';
     printf("\n");
     return;
+}
+
+void saveTask(task toDoList[], int *tasknum)
+{
+  FILE *savedTasks;
+  char lineParse[256];
+  int compareTaskNum;
+  
+  savedTasks = fopen("data/tasks.txt", "r");
+  if (savedTasks != NULL) {
+    while (fgets(lineParse, sizeof(lineParse),savedTasks) != NULL) {
+      if (sscanf(lineParse, "Task #%d:", &compareTaskNum) == 1) {
+        if (compareTaskNum == *tasknum) {
+          printf("ERROR: Task slot is already filled");
+          fclose(savedTasks);
+          return;
+        }
+      }
+    }
+    fclose(savedTasks);
+  }
+  savedTasks = fopen("data/tasks.txt", "a");
+      if (savedTasks != NULL) {
+        fprintf(savedTasks, "Task #%d: %s\n", *tasknum, toDoList[*tasknum].description);
+        fclose(savedTasks);
+        return;
+      } else {
+        printf("ERROR: File cannot be opened");
+        return;
+      }
 }
 
 void printOptions()

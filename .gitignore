@@ -2,6 +2,7 @@
 build/
 bin/
 dist/
+data/
 
 # Compiled files
 *.o 
