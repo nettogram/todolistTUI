@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #define INPUTLENGTH 50
 #define NOTFINISHED 0
@@ -21,6 +22,7 @@ void printOptions(void);
 void taskView(void);
 void makeTasksEmpty(task toDoList[]);
 void saveTask(task toDoList[], int *tasknum);
+void loadTask(task toDoList[]);
 
 int main(void)
 {
@@ -28,8 +30,8 @@ int main(void)
   int *taskselect = &taskoption;
   task toDoList[10];
 
-  makeTasksEmpty(toDoList);
-  
+  loadTask(toDoList);
+
   do {
     printOptions();
     printf("Please select an option: ");
@@ -193,8 +195,32 @@ void makeTasksEmpty(task toDoList[])
 {
   for (int i = 0; i < 10; i++){
     for (int n = 0; n < INPUTLENGTH; n++) {
-      toDoList[i].description[INPUTLENGTH] = '\n';
+      toDoList[i].description[n] = '\0';
     }
     toDoList[i].storage = EMPTY;
+  }
+}
+
+void loadTask(task toDoList[]) 
+{
+  FILE *loadFile;
+  char tempStringBuffer[INPUTLENGTH];
+  char lineBuffer[256];
+  int taskNum;
+
+  loadFile = fopen("../data/tasks.txt", "r");
+  if (loadFile != NULL) {
+    while(fgets(lineBuffer, sizeof(lineBuffer), loadFile) != NULL) {
+      if ((sscanf(lineBuffer, "Task #%d: %99[^\n]", &taskNum, tempStringBuffer)) == 2) {
+        strncpy(toDoList[taskNum].description, tempStringBuffer, INPUTLENGTH - 1);
+        toDoList[taskNum].description[INPUTLENGTH] = '\0';
+        toDoList[taskNum].storage = NOTEMPTY;
+      }
+    }
+    fclose(loadFile);
+    return;
+  } else {
+  printf("ERROR: no saved tasks");
+  return;
   }
 }
