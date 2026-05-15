@@ -1,4 +1,4 @@
-// toDoList.h - header that stores calls related to 
+// todoFunctions.h - header that stores calls related to 
 // to do list manipulation
 
 #ifndef TODOFUNCTIONS_H
