@@ -20,7 +20,6 @@ void taskSelect(int *taskNum);
 void removeTask(task toDoList[], int *tasknum);
 void printOptions(void);
 void taskView(void);
-void makeTasksEmpty(task toDoList[]);
 void saveTask(task toDoList[], int *tasknum);
 void loadTask(task toDoList[]);
 
@@ -189,16 +188,6 @@ void taskView()
   }
   fclose(fileRead);
   return;
-}
-
-void makeTasksEmpty(task toDoList[])
-{
-  for (int i = 0; i < 10; i++){
-    for (int n = 0; n < INPUTLENGTH; n++) {
-      toDoList[i].description[n] = '\0';
-    }
-    toDoList[i].storage = EMPTY;
-  }
 }
 
 void loadTask(task toDoList[]) 

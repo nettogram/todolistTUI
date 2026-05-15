@@ -4,6 +4,9 @@
 #ifndef STORAGE_H
 #define STORAGE_H
 
+#include "todoFunctions.h"
+
+// function prototypes
 void saveTask(task toDoList[], int *tasknum);
 void loadTask(task toDoList[]);
 
