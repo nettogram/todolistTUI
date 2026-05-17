@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "storage.h"
 #include "todoFunctions.h"
 
@@ -30,4 +31,27 @@ void saveTask(task toDoList[], int *tasknum)
       printf("ERROR: File cannot be opened");
       return;
     }
+}
+
+
+void loadTask(task toDoList[]) {  
+  FILE *loadFile;  
+  char tempStringBuffer[INPUTLENGTH];  
+  char lineBuffer[256];  
+  int taskNum;  
+  loadFile = fopen("../data/tasks.txt", "r");  
+  if (loadFile != NULL) {    
+    while(fgets(lineBuffer, sizeof(lineBuffer), loadFile) != NULL) {      
+      if ((sscanf(lineBuffer, "Task #%d: %99[^\n]", &taskNum, tempStringBuffer)) == 2) {        
+        strncpy(toDoList[taskNum].description, tempStringBuffer, INPUTLENGTH - 1);        
+        toDoList[taskNum].description[INPUTLENGTH] = '\0';        
+        toDoList[taskNum].storage = NOTEMPTY;      
+      }    
+    }    
+    fclose(loadFile);    
+    return;  
+  } else {  
+    printf("ERROR: no saved tasks");  
+    return;  
+  }
 }
