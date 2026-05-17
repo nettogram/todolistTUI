@@ -11,7 +11,7 @@ $(TARGET): $(SRC) | build
 build: 
 	mkdir -p build
 
-run: $s(TARGET)
+run: $(TARGET)
 	./$(TARGET)
 
 clean: 

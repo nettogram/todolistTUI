@@ -55,20 +55,20 @@ void removeTask(task toDoList[], int *tasknum)
   toDoList[*tasknum].storage = EMPTY;
 
 
-  refreshTask = fopen("..data/tasks.tmp", "w");
+  refreshTask = fopen(TEMP_LOC, "w");
 
   if (refreshTask != NULL) {
     for (int i = 0; i < 10; i++) {
-      if (toDoList[i].storage != EMPTY)
+      if (toDoList[i].storage == NOTEMPTY)
         fprintf(refreshTask, "Task #%d: %s\n", i, toDoList[i].description);
     }
     fclose(refreshTask);
-    remove("../data/tasks.tmp");
-    rename("../data/tasks.tmp", "../data/tasks.txt");
+    remove(TASK_LOC);
+    rename(TEMP_LOC, TASK_LOC);
     return;
   } else {
       printf("ERROR: Task cannot be performed.");
-      remove("..data/tasks.tmp");
+      remove(TEMP_LOC);
       return;
   }
 }
@@ -79,7 +79,7 @@ void taskView()
   char tempStringBuffer[256];
   printf("\n");
 
-  fileRead = fopen("../data/tasks.txt", "r");
+  fileRead = fopen(TASK_LOC, "r");
 
   if (fileRead != NULL) {
     while (fgets(tempStringBuffer, sizeof(tempStringBuffer), fileRead) != NULL) {

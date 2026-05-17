@@ -9,7 +9,7 @@ void saveTask(task toDoList[], int *tasknum)
   char lineParse[256];
   int compareTaskNum;
   
-  savedTasks = fopen("../data/tasks.txt", "r");
+  savedTasks = fopen(TASK_LOC, "r");
   if (savedTasks != NULL) {
     while (fgets(lineParse, sizeof(lineParse),savedTasks) != NULL) {
       if (sscanf(lineParse, "Task #%d:", &compareTaskNum) == 1) {
@@ -22,7 +22,7 @@ void saveTask(task toDoList[], int *tasknum)
     }
     fclose(savedTasks);
   }
-  savedTasks = fopen("../data/tasks.txt", "a");
+  savedTasks = fopen(TASK_LOC, "a");
     if (savedTasks != NULL) {
       fprintf(savedTasks, "Task #%d: %s\n", *tasknum, toDoList[*tasknum].description);
       fclose(savedTasks);
@@ -33,13 +33,12 @@ void saveTask(task toDoList[], int *tasknum)
     }
 }
 
-
 void loadTask(task toDoList[]) {  
   FILE *loadFile;  
   char tempStringBuffer[INPUTLENGTH];  
   char lineBuffer[256];  
   int taskNum;  
-  loadFile = fopen("../data/tasks.txt", "r");  
+  loadFile = fopen(TASK_LOC, "r");  
   if (loadFile != NULL) {    
     while(fgets(lineBuffer, sizeof(lineBuffer), loadFile) != NULL) {      
       if ((sscanf(lineBuffer, "Task #%d: %99[^\n]", &taskNum, tempStringBuffer)) == 2) {        
@@ -50,8 +49,13 @@ void loadTask(task toDoList[]) {
     }    
     fclose(loadFile);    
     return;  
-  } else {  
-    printf("ERROR: no saved tasks");  
-    return;  
+  } else {
+      loadFile = fopen(TASK_LOC, "a");  
+      if (loadFile == NULL) {
+      printf("Could not create a save file");
+      return;
+    }
+      fclose(loadFile);
+      return;
   }
 }
