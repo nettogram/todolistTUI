@@ -93,16 +93,15 @@ WINDOW *createSubWindow(WINDOW *mainWin, int height, int width)
 
 int menu(int height, int width, int starty, int startx)
 {
-// Menu Window declarations
-  ITEM **menuItems;
-  MENU *mainMenu;
-  WINDOW *menuWindow;
-  WINDOW *menuChoices;
-  int numofchoices;
-  int ch;
+// Variable declarations
+  ITEM **menuItems; // menu items stored here
+  MENU *mainMenu; // actual menu variable type
+  WINDOW *menuWindow; // window type - main window
+  WINDOW *menuChoices; // window type - sub window
+  int numofchoices; // gets number of variables from choices string array
   int choice = -1;
   
-  // menu initialization
+  // menu item type initialization
   numofchoices = ARRAY_SIZE(choices); // counts number of choices 
   menuItems = (ITEM **)calloc(numofchoices + 1, sizeof(ITEM *)); // creates space for choices
   
@@ -110,7 +109,7 @@ int menu(int height, int width, int starty, int startx)
     menuItems[i] = new_item(choices[i], choices[i]);
 
   menuItems[numofchoices] = (ITEM *) NULL; // adds a null ending to the end (necessary for ITEM * variable type)
-  mainMenu = new_menu((ITEM **)menuItems); // makes the actual menu type
+  mainMenu = new_menu((ITEM **)menuItems); // initializes the actual menu type
 
   // menu window initialization
   menuWindow = createNewWindow(height, width, starty + 2, startx);
@@ -132,6 +131,7 @@ int menu(int height, int width, int starty, int startx)
   wrefresh(menuChoices);
 
   // loop that reads for user input
+  int ch;
   while ((ch = wgetch(menuWindow)) != 'q') {
     switch (ch) {
       case KEY_DOWN:
@@ -160,10 +160,10 @@ int menu(int height, int width, int starty, int startx)
   free_menu(mainMenu);
   
   // clearing menu items and window
-  for (int i = 0; i < numofchoices; i++) free_item(menuItems[i]);
-  free(menuItems);
-  delwin(menuChoices);
-  delwin(menuWindow);
+  for (int i = 0; i < numofchoices; i++) free_item(menuItems[i]); // freeing items stored in memory storage
+  free(menuItems); // freeing actual memory storage
+  delwin(menuChoices); // free sub menu window
+  delwin(menuWindow); // free main menu window
 
   return choice; // returns the value to use for main()
 }
