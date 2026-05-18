@@ -3,13 +3,25 @@
 #include <ncurses.h>
 #include <string.h>
 #include <menu.h>
+#include "storage.h"
+#include "todoFunctions.h"
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
+
+//error strings 
+const char *errorMsg[] {
+  "NO ERROR",
+  "ERROR: Invalid Task Number",
+  "ERROR: Task slot filled",
+  "ERROR: Removal Error/Task already empty",
+  "ERROR: No tasks saved",
+};
 
 // function declarations
 WINDOW *createNewWindow(int height, int width, int starty, int startx);
 WINDOW *createSubWindow(WINDOW *mainWin, int height, int width);
 int menu(int height, int width, int starty, int startx);
+void errorWin(char *errorMsg[], int errorType, int height, int width, int starty, int startx);
 
 // menu window choices
 char *choices[] = {
@@ -55,8 +67,40 @@ int main(void)
   titleCentery = 1;
   mvwprintw(headerWindow, titleCentery, titleCenterx, "To Do List");
   wrefresh(headerWindow);
+  
+  // To Do List functionality declarations
+  int taskoption = 0;
+  int *taskChoice = &taskoption
+  task toDoList[10];
+  int errorNum = 0
+  int errorType = &errorNum;
 
-  userSelection = menu(height, width, starty, startx);
+  // main program loop
+  do {
+    userSelection = menu(height, width, starty, startx);
+    switch(userSelection) {
+      case 0: {
+        delwin(headerWindow);
+        taskSelect(taskChoice, titleheight, width, starty, startx);
+        if (*taskChoice == ERROR) {
+        errorWin(errorMsg, errorType, titleheight, width, starty, startx));
+        break;
+        } else if (toDoList[*taskChoice].storage == NOTEMPTY) {
+            printf("Unable to fill entry. Task slot is currently filled");
+            break;
+        } else {
+            addTask(toDoList, taskChoice);
+            saveTask(toDoList, taskChoice);
+            break;
+        
+      } case 1: {
+        
+      } case 2: {
+
+      } case 3: {
+        
+      }
+    } while (1);
 
   // temporary end window for size testing 
   if ((ch = getch()) == 'q') {
@@ -167,3 +211,21 @@ int menu(int height, int width, int starty, int startx)
 
   return choice; // returns the value to use for main()
 }
+
+
+void errorWin(char *errorMsg[], int errorType, int height, int width, int starty, int startx) 
+{
+  WINDOW *errorWindow;
+  errorWindow = createNewWindow(height, width, starty, startx);
+  mvprintw(errorWindow, 1, 1, "%s", errorMsg[errorType]);
+  wrefresh(errorWindow);
+  int ch;
+  while ((ch = wgetch(errorWindow)) != 10 && ch != 'q') {
+      // Program waits for input 
+  }
+  werase(errorWindow);
+  wrefresh(errorWindow);
+  delwin(errorWindow);
+  return;
+}
+  

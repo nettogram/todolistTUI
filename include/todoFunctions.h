@@ -11,7 +11,6 @@
 #define EMPTY 0
 #define NOTEMPTY 1
 #define ERROR 404
-
 // struct that stores to do list 
 typedef struct{
   char description[INPUTLENGTH + 1];

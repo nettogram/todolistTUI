@@ -24,4 +24,12 @@ This project is for practicing:
 - File I/O with basic functions 
 - Ncurses frontend / introductory library manipulation 
 
+## v1 status:
 
+(5/17/26)
+Version 1 (with ncurses) was attempted, but I decided to scrap using ncurses and attempt this at another time with Python.
+I realized the effort is not worth it, and my idea for this project is a modular tool that I can improve over time.
+If I continued to make the foundation of this project in C, then the modularity aspect may become compromised. 
+Ncurses is a wonderful tool, but I want to practice choosing the right tools for the right job. 
+
+In the future, I may attempt an NCURSES style app again. This time around, I'll move on and consider V0 as my stopping point for now

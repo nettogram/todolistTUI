@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <ncurses.h>
 #include "storage.h"
 #include "todoFunctions.h"
 
@@ -13,14 +14,27 @@ void printOptions()
   }
 
 
-void taskSelect(int *taskoption)
+void taskSelect(int *taskoption, int height, int width, int starty, int startx)
 {
-  printf("Please select the task slot (0-9): ");
-  scanf("%d", taskoption);
-  if (*taskoption < 0 || *taskoption > 9) {
-    printf("Invalid task.\n");
-    *taskoption = ERROR;
-  } 
+  WINDOW *taskselectwin
+  taskselectwin = createNewWindow(height, witdth, starty, startx);
+  mvwprintw(taskselectwin, 1, 1, "Please select the task slot (1-10): ");
+  wscanw(taskselectwin, "%d", taskoption);
+  while (1) {
+    if (*taskoption < 1 || *taskoption > 10) {
+      *taskoption = ERROR;
+      werase(taskselectwin);
+      wrefresh(taskselectwin);
+      delwin(taskselectwin);
+      return;
+    } else {
+        *taskoption--;
+        werase(taskselectwin);
+        wrefresh(taskselectwin);
+        delwin(taskselectwin);
+        return;
+    }
+  }
 }
 
 void addTask(task toDoList[], int *tasknum)
